@@ -3,26 +3,22 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img, img_to_array
 import os
-import zipfile
-import gdown
+import tarfile
 
 st.title("Clasificador de Frutas 🍓🍍🍌")
 
-# Rutas del archivo
-modelo_zip = "modelo_frutasFINAL.zip"
+# Rutas
+archivo_tar = "modelo_frutasFINAL.tar.gz"
 modelo_path = "modelo_frutasFINAL.keras"
 
-# Descargar y descomprimir el modelo si no existe
+# Descomprimir el modelo si no existe
 if not os.path.exists(modelo_path):
-    with st.spinner("Descargando y descomprimiendo el modelo..."):
-        file_id = "1TcsxaaQur7Fc2lJZKu5OAiuFv_ytdcrn"
-        url = f"https://drive.google.com/uc?id={file_id}"
-        gdown.download(url, modelo_zip, quiet=False, fuzzy=True)
-        with zipfile.ZipFile(modelo_zip, 'r') as zip_ref:
-            zip_ref.extractall()
-        st.success("✅ Modelo descargado y listo")
+    with st.spinner("Descomprimiendo el modelo..."):
+        with tarfile.open(archivo_tar, "r:gz") as tar:
+            tar.extractall()
+        st.success("✅ Modelo cargado correctamente")
 
-# Cargar el modelo solo una vez
+# Cargar el modelo (solo una vez)
 @st.cache_resource
 def cargar_modelo():
     return load_model(modelo_path)
@@ -38,7 +34,7 @@ class_names = [
     'Corn'
 ]
 
-# Subida de imagen
+# Subir imagen
 uploaded_file = st.file_uploader("📷 Subí una imagen de fruta", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
