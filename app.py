@@ -8,26 +8,25 @@ import zipfile
 
 st.title("Clasificador de Frutas 🍓🍍🍌")
 
-# Ruta local del modelo y zip
+# Rutas
 modelo_zip = "modelo_frutasV2.zip"
 modelo_path = "modelo_frutasV2.keras"
 
-# Descargar y descomprimir el modelo si no existe
+# Descargar y descomprimir si no existe
 if not os.path.exists(modelo_path):
     with st.spinner("Descargando y descomprimiendo el modelo..."):
-        url = "https://drive.google.com/uc?export=download&id=1HDmk1M4LgnkTe6VPIx0ruBq_i2P74myE"
+        url = "https://drive.google.com/uc?export=download&id=12vCwMP_vJOtqciuhpgU_KsZhCFeRZJaM"
         urllib.request.urlretrieve(url, modelo_zip)
         with zipfile.ZipFile(modelo_zip, 'r') as zip_ref:
             zip_ref.extractall()
-        st.success("Modelo descargado y listo")
+        st.success("✅ Modelo descargado y listo")
 
-# Cargar el modelo
+# Cargar el modelo (una sola vez)
 @st.cache_resource
 def cargar_modelo():
     return load_model(modelo_path)
 
 modelo = cargar_modelo()
-
 
 # Lista de clases
 class_names = [
@@ -38,8 +37,8 @@ class_names = [
     'Corn'
 ]
 
-# Subir una imagen
-uploaded_file = st.file_uploader("Subí una imagen de fruta", type=["jpg", "jpeg", "png"])
+# Subir imagen
+uploaded_file = st.file_uploader("📷 Subí una imagen de fruta", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     st.image(uploaded_file, caption="Imagen subida", use_column_width=True)
@@ -53,4 +52,4 @@ if uploaded_file is not None:
     confidence = np.max(pred)
 
     st.markdown(f"### 🧠 Predicción: **{predicted_class}**")
-    st.markdown(f"Confianza: **{confidence * 100:.2f}%**")
+    st.markdown(f"📊 Confianza: **{confidence * 100:.2f}%**")
