@@ -4,25 +4,30 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img, img_to_array
 import os
 import urllib.request
+import zipfile
 
 st.title("Clasificador de Frutas 🍓🍍🍌")
 
-# Ruta local del modelo
+# Ruta local del modelo y zip
+modelo_zip = "modelo_frutasV2.zip"
 modelo_path = "modelo_frutasV2.keras"
 
-# Si no existe localmente, descargarlo desde Google Drive
+# Descargar y descomprimir el modelo si no existe
 if not os.path.exists(modelo_path):
-    with st.spinner("Descargando el modelo..."):
-        url = "https://drive.google.com/uc?export=download&id=18mwFgX7eaZFPkutlQlWoXMcGsUBrS8Lp"
-        urllib.request.urlretrieve(url, modelo_path)
-        st.success("Modelo descargado exitosamente")
+    with st.spinner("Descargando y descomprimiendo el modelo..."):
+        url = "https://drive.google.com/uc?export=download&id=1HDmk1M4LgnkTe6VPIx0ruBq_i2P74myE"
+        urllib.request.urlretrieve(url, modelo_zip)
+        with zipfile.ZipFile(modelo_zip, 'r') as zip_ref:
+            zip_ref.extractall()
+        st.success("Modelo descargado y listo")
 
-# Cargar el modelo (usamos cache para que no se recargue siempre)
+# Cargar el modelo
 @st.cache_resource
 def cargar_modelo():
     return load_model(modelo_path)
 
 modelo = cargar_modelo()
+
 
 # Lista de clases
 class_names = [
