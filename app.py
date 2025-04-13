@@ -2,23 +2,13 @@ import streamlit as st
 import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img, img_to_array
-import os
-import tarfile
 
 st.title("Clasificador de Frutas 🍓🍍🍌")
 
-# Rutas
-archivo_tar = "modelo_frutasFINAL.tar.gz"
+# Ruta del modelo que está directamente en el repo
 modelo_path = "modelo_frutasFINAL.keras"
 
-# Descomprimir el modelo si no existe
-if not os.path.exists(modelo_path):
-    with st.spinner("Descomprimiendo el modelo..."):
-        with tarfile.open(archivo_tar, "r:gz") as tar:
-            tar.extractall()
-        st.success("✅ Modelo cargado correctamente")
-
-# Cargar el modelo (solo una vez)
+# Cargar el modelo (una vez)
 @st.cache_resource
 def cargar_modelo():
     return load_model(modelo_path)
@@ -50,4 +40,3 @@ if uploaded_file is not None:
 
     st.markdown(f"### 🧠 Predicción: **{predicted_class}**")
     st.markdown(f"📊 Confianza: **{confidence * 100:.2f}%**")
-
