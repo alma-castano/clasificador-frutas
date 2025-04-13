@@ -2,13 +2,25 @@ import streamlit as st
 import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img, img_to_array
+import os
+import urllib.request
 
 st.title("Clasificador de Frutas 🍓🍍🍌")
 
-# Cargar el modelo
+# Ruta local del modelo
+modelo_path = "modelo_frutasV2.keras"
+
+# Si no existe localmente, descargarlo desde Google Drive
+if not os.path.exists(modelo_path):
+    with st.spinner("Descargando el modelo..."):
+        url = "https://drive.google.com/uc?export=download&id=18mwFgX7eaZFPkutlQlWoXMcGsUBrS8Lp"
+        urllib.request.urlretrieve(url, modelo_path)
+        st.success("Modelo descargado exitosamente")
+
+# Cargar el modelo (usamos cache para que no se recargue siempre)
 @st.cache_resource
 def cargar_modelo():
-    return load_model("modelo_frutasV2.keras")
+    return load_model(modelo_path)
 
 modelo = cargar_modelo()
 
