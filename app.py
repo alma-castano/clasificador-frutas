@@ -3,8 +3,8 @@ import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.utils import load_img, img_to_array
 import os
-import urllib.request
 import zipfile
+import gdown
 
 st.title("Clasificador de Frutas 🍓🍍🍌")
 
@@ -12,11 +12,12 @@ st.title("Clasificador de Frutas 🍓🍍🍌")
 modelo_zip = "modelo_frutasV2.zip"
 modelo_path = "modelo_frutasV2.keras"
 
-# Descargar y descomprimir si no existe
+# Descargar y descomprimir con gdown si no existe
 if not os.path.exists(modelo_path):
     with st.spinner("Descargando y descomprimiendo el modelo..."):
-        url = "https://drive.google.com/uc?export=download&id=12vCwMP_vJOtqciuhpgU_KsZhCFeRZJaM"
-        urllib.request.urlretrieve(url, modelo_zip)
+        file_id = "12vCwMP_vJOtqciuhpgU_KsZhCFeRZJaM"
+        url = f"https://drive.google.com/uc?id={file_id}"
+        gdown.download(url, modelo_zip, quiet=False)
         with zipfile.ZipFile(modelo_zip, 'r') as zip_ref:
             zip_ref.extractall()
         st.success("✅ Modelo descargado y listo")
@@ -53,3 +54,4 @@ if uploaded_file is not None:
 
     st.markdown(f"### 🧠 Predicción: **{predicted_class}**")
     st.markdown(f"📊 Confianza: **{confidence * 100:.2f}%**")
+
