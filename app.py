@@ -8,21 +8,21 @@ import gdown
 
 st.title("Clasificador de Frutas 🍓🍍🍌")
 
-# Rutas
-modelo_zip = "modelo_frutasV2.zip"
-modelo_path = "modelo_frutasV2.keras"
+# Rutas del archivo
+modelo_zip = "modelo_frutas_ok.zip"
+modelo_path = "modelo_frutas_ok.keras"
 
-# Descargar y descomprimir con gdown si no existe
+# Descargar y descomprimir el modelo si no existe
 if not os.path.exists(modelo_path):
     with st.spinner("Descargando y descomprimiendo el modelo..."):
-        file_id = "12vCwMP_vJOtqciuhpgU_KsZhCFeRZJaM"
+        file_id = "1J8_ERz2gC3ctsBpud6WC_ML4BRwUrfHF"
         url = f"https://drive.google.com/uc?id={file_id}"
         gdown.download(url, modelo_zip, quiet=False)
         with zipfile.ZipFile(modelo_zip, 'r') as zip_ref:
             zip_ref.extractall()
         st.success("✅ Modelo descargado y listo")
 
-# Cargar el modelo (una sola vez)
+# Cargar el modelo solo una vez
 @st.cache_resource
 def cargar_modelo():
     return load_model(modelo_path)
@@ -38,7 +38,7 @@ class_names = [
     'Corn'
 ]
 
-# Subir imagen
+# Subida de imagen
 uploaded_file = st.file_uploader("📷 Subí una imagen de fruta", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
@@ -54,4 +54,3 @@ if uploaded_file is not None:
 
     st.markdown(f"### 🧠 Predicción: **{predicted_class}**")
     st.markdown(f"📊 Confianza: **{confidence * 100:.2f}%**")
-
