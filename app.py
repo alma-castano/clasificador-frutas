@@ -17,7 +17,7 @@ if not os.path.exists(modelo_path):
     with st.spinner("Descargando y descomprimiendo el modelo..."):
         file_id = "1TcsxaaQur7Fc2lJZKu5OAiuFv_ytdcrn"
         url = f"https://drive.google.com/uc?id={file_id}"
-        gdown.download(url, modelo_zip, quiet=False)
+        gdown.download(url, modelo_zip, quiet=False, fuzzy=True)
         with zipfile.ZipFile(modelo_zip, 'r') as zip_ref:
             zip_ref.extractall()
         st.success("✅ Modelo descargado y listo")
